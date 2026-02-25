@@ -145,7 +145,7 @@ const FormulaireProduit = () => {
                     </Notification>,
                 )
             }
-            navigate(`/app/boutiques/${boutiqueId}/produits`)
+            navigate(`/boutiques/${boutiqueId}/produits`)
         } catch (err) {
             console.error('Erreur sauvegarde produit:', err)
             toast.push(
@@ -293,7 +293,7 @@ const FormulaireProduit = () => {
                             type="button"
                             onClick={() =>
                                 navigate(
-                                    `/app/boutiques/${boutiqueId}/produits`,
+                                    `/boutiques/${boutiqueId}/produits`,
                                 )
                             }
                         >

@@ -121,7 +121,7 @@ const DetailProduit = () => {
                     Produit supprime avec succes.
                 </Notification>,
             )
-            navigate(`/app/boutiques/${boutiqueId}/produits`)
+            navigate(`/boutiques/${boutiqueId}/produits`)
         } catch (err) {
             console.error('Erreur suppression produit:', err)
             toast.push(
