@@ -1,0 +1,12 @@
+**/node_modules
+node_modules/
+backend/node_modules/
+frontend-v2/node_modules/
+frontend/
+.claude/
+.DS_Store
+*.log
+backend/uploads/
+backend/.env
+frontend-v2/.env
+.git

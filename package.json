@@ -1,0 +1,13 @@
+{
+  "name": "kalis",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "install:all": "cd backend && npm install && cd ../frontend-v2 && npm install",
+    "build": "cd frontend-v2 && npm run build",
+    "start": "cd backend && node server.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.local
+.DS_Store
+*.log
+backend/uploads/
+frontend-v2/build/
+frontend/
+.claude/
+kalis-backend/
