@@ -8,7 +8,7 @@ const demarrer = async () => {
     await sequelize.authenticate();
     console.log('Connexion a la base de donnees MySQL reussie.');
 
-    await sequelize.sync({ alter: process.env.NODE_ENV === 'development' });
+    await sequelize.sync({ alter: true });
     console.log('Modeles synchronises avec la base de donnees.');
 
     app.listen(PORT, () => {
