@@ -7,7 +7,7 @@ const { calculerPagination, construirePagination } = require('../utils/helpers')
 // POST / - Creer un produit
 const creer = async (req, res) => {
   try {
-    const { nom, description, categorieId, prixAchat, prixVente, quantiteStock, seuilAlerte } = req.body;
+    const { nom, description, categorieId, prixAchat, prixVente, quantiteStock, seuilAlerte, etat, sousEtat } = req.body;
 
     const produit = await sequelize.transaction(async (t) => {
       const nouveauProduit = await Produit.create(
@@ -20,6 +20,8 @@ const creer = async (req, res) => {
           prixVente,
           quantiteStock: quantiteStock || 0,
           seuilAlerte,
+          etat: etat || 'neuf_scelle',
+          sousEtat: etat === 'seconde_main' ? sousEtat : null,
         },
         { transaction: t }
       );
@@ -117,7 +119,7 @@ const detail = async (req, res) => {
 const modifier = async (req, res) => {
   try {
     const { id } = req.params;
-    const { nom, description, categorieId, prixAchat, prixVente, seuilAlerte } = req.body;
+    const { nom, description, categorieId, prixAchat, prixVente, seuilAlerte, etat, sousEtat } = req.body;
 
     const produit = await Produit.findByPk(id);
 
@@ -129,6 +131,11 @@ const modifier = async (req, res) => {
       return reponseErreur(res, 403, 'Ce produit n\'appartient pas a cette boutique.');
     }
 
+    const etatFinal = etat !== undefined ? etat : produit.etat;
+    const sousEtatFinal = etatFinal === 'seconde_main'
+      ? (sousEtat !== undefined ? sousEtat : produit.sousEtat)
+      : null;
+
     await produit.update({
       nom: nom !== undefined ? nom : produit.nom,
       description: description !== undefined ? description : produit.description,
@@ -136,6 +143,8 @@ const modifier = async (req, res) => {
       prixAchat: prixAchat !== undefined ? prixAchat : produit.prixAchat,
       prixVente: prixVente !== undefined ? prixVente : produit.prixVente,
       seuilAlerte: seuilAlerte !== undefined ? seuilAlerte : produit.seuilAlerte,
+      etat: etatFinal,
+      sousEtat: sousEtatFinal,
     });
 
     return reponseSucces(res, 200, 'Produit modifie avec succes.', produit);

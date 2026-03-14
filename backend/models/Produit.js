@@ -45,6 +45,16 @@ module.exports = (sequelize) => {
       allowNull: false,
       defaultValue: 5,
     },
+    etat: {
+      type: DataTypes.ENUM('neuf_scelle', 'neuf_non_scelle', 'seconde_main'),
+      allowNull: false,
+      defaultValue: 'neuf_scelle',
+    },
+    sousEtat: {
+      type: DataTypes.ENUM('excellent', 'bon', 'moyen', 'passable'),
+      allowNull: true,
+      defaultValue: null,
+    },
     image: {
       type: DataTypes.STRING(255),
     },

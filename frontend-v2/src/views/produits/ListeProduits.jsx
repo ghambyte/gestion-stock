@@ -83,6 +83,38 @@ const ListeProduits = () => {
         setPage(nouvellePage)
     }
 
+    const renderEtatTag = (produit) => {
+        const etatConfig = {
+            neuf_scelle: {
+                label: 'Neuf scelle',
+                className: 'bg-green-100 text-green-600 border-green-200 dark:bg-green-500/20 dark:text-green-400 dark:border-green-400/20',
+            },
+            neuf_non_scelle: {
+                label: 'Neuf non scelle',
+                className: 'bg-blue-100 text-blue-600 border-blue-200 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-400/20',
+            },
+            seconde_main: {
+                label: 'Seconde main',
+                className: 'bg-amber-100 text-amber-600 border-amber-200 dark:bg-amber-500/20 dark:text-amber-400 dark:border-amber-400/20',
+            },
+        }
+        const sousEtatLabels = {
+            excellent: 'Excellent',
+            bon: 'Bon',
+            moyen: 'Moyen',
+            passable: 'Passable',
+        }
+        const config = etatConfig[produit.etat] || etatConfig.neuf_scelle
+        const sousEtatLabel = produit.etat === 'seconde_main' && produit.sousEtat
+            ? ` (${sousEtatLabels[produit.sousEtat] || produit.sousEtat})`
+            : ''
+        return (
+            <Tag className={config.className}>
+                {config.label}{sousEtatLabel}
+            </Tag>
+        )
+    }
+
     const renderStockTag = (produit) => {
         const estBas =
             produit.quantiteStock <= (produit.seuilAlerte || 0)
@@ -152,6 +184,9 @@ const ListeProduits = () => {
                                         Prix Vente
                                     </th>
                                     <th className="text-center py-3 px-4 font-semibold">
+                                        Etat
+                                    </th>
+                                    <th className="text-center py-3 px-4 font-semibold">
                                         Stock
                                     </th>
                                     <th className="text-center py-3 px-4 font-semibold">
@@ -190,6 +225,9 @@ const ListeProduits = () => {
                                                 )}
                                             </td>
                                             <td className="py-3 px-4 text-center">
+                                                {renderEtatTag(produit)}
+                                            </td>
+                                            <td className="py-3 px-4 text-center">
                                                 {renderStockTag(produit)}
                                             </td>
                                             <td className="py-3 px-4 text-center">
@@ -209,7 +247,7 @@ const ListeProduits = () => {
                                 ) : (
                                     <tr>
                                         <td
-                                            colSpan={6}
+                                            colSpan={7}
                                             className="py-8 text-center text-gray-500"
                                         >
                                             Aucun produit trouve

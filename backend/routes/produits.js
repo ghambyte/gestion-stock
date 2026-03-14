@@ -30,6 +30,12 @@ router.post(
     body('prixVente')
       .notEmpty().withMessage('Le prix de vente est requis.')
       .isNumeric().withMessage('Le prix de vente doit etre un nombre.'),
+    body('etat')
+      .optional()
+      .isIn(['neuf_scelle', 'neuf_non_scelle', 'seconde_main']).withMessage('Etat invalide.'),
+    body('sousEtat')
+      .optional()
+      .isIn(['excellent', 'bon', 'moyen', 'passable']).withMessage('Sous-etat invalide.'),
     validerRequete,
   ],
   produitControleur.creer

@@ -31,7 +31,22 @@ const FormulaireProduit = () => {
         prixVente: '',
         quantiteStock: '',
         seuilAlerte: '',
+        etat: 'neuf_scelle',
+        sousEtat: '',
     })
+
+    const optionsEtat = [
+        { value: 'neuf_scelle', label: 'Neuf scelle' },
+        { value: 'neuf_non_scelle', label: 'Neuf non scelle' },
+        { value: 'seconde_main', label: 'Seconde main' },
+    ]
+
+    const optionsSousEtat = [
+        { value: 'excellent', label: 'Excellent etat' },
+        { value: 'bon', label: 'Bon etat' },
+        { value: 'moyen', label: 'Etat moyen' },
+        { value: 'passable', label: 'Etat passable' },
+    ]
     const [erreurs, setErreurs] = useState({})
 
     const chargerCategories = useCallback(async () => {
@@ -64,6 +79,8 @@ const FormulaireProduit = () => {
                 prixVente: produit.prixVente ?? '',
                 quantiteStock: produit.quantiteStock ?? '',
                 seuilAlerte: produit.seuilAlerte ?? '',
+                etat: produit.etat || 'neuf_scelle',
+                sousEtat: produit.sousEtat || '',
             })
         } catch (err) {
             console.error('Erreur chargement produit:', err)
@@ -85,7 +102,13 @@ const FormulaireProduit = () => {
     }, [boutiqueId, chargerCategories, chargerProduit])
 
     const handleChange = (champ, valeur) => {
-        setFormulaire((prev) => ({ ...prev, [champ]: valeur }))
+        setFormulaire((prev) => {
+            const maj = { ...prev, [champ]: valeur }
+            if (champ === 'etat' && valeur !== 'seconde_main') {
+                maj.sousEtat = ''
+            }
+            return maj
+        })
         if (erreurs[champ]) {
             setErreurs((prev) => ({ ...prev, [champ]: '' }))
         }
@@ -124,6 +147,8 @@ const FormulaireProduit = () => {
                 seuilAlerte: formulaire.seuilAlerte
                     ? parseInt(formulaire.seuilAlerte, 10)
                     : undefined,
+                etat: formulaire.etat,
+                sousEtat: formulaire.etat === 'seconde_main' ? formulaire.sousEtat || undefined : undefined,
             }
 
             if (!estEdition) {
@@ -205,6 +230,30 @@ const FormulaireProduit = () => {
                                 isClearable
                             />
                         </FormItem>
+
+                        <FormItem label="Etat du produit">
+                            <Select
+                                options={optionsEtat}
+                                value={optionsEtat.find((o) => o.value === formulaire.etat) || optionsEtat[0]}
+                                onChange={(option) =>
+                                    handleChange('etat', option ? option.value : 'neuf_scelle')
+                                }
+                            />
+                        </FormItem>
+
+                        {formulaire.etat === 'seconde_main' && (
+                            <FormItem label="Sous-etat">
+                                <Select
+                                    placeholder="Selectionner le sous-etat"
+                                    options={optionsSousEtat}
+                                    value={optionsSousEtat.find((o) => o.value === formulaire.sousEtat) || null}
+                                    onChange={(option) =>
+                                        handleChange('sousEtat', option ? option.value : '')
+                                    }
+                                    isClearable
+                                />
+                            </FormItem>
+                        )}
 
                         <FormItem
                             label="Prix d'achat"
